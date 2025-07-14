@@ -1,0 +1,157 @@
+import sys
+sys.path.append('./')
+import os
+import json
+import numpy as np
+from tqdm import tqdm
+from PIL import Image
+import torch
+from torch.utils.data import Dataset, DataLoader
+import argparse
+import torch
+from PIL import Image
+from generation import Llama3_Vision
+import random
+
+def pil_collate_fn(batch):
+    image, question, choices, answer_tokens, qa_id, answer, q_type = zip(*batch) 
+    return list(image), list(question), list(choices), list(answer_tokens), list(qa_id), list(answer), list(q_type)
+
+class Visual7W(Dataset):
+    def __init__(self, image_dir) -> None:
+        super().__init__() 
+
+        self.image_dir = image_dir   
+        with open("tracing_information_flow/dataset/visual7w/filtered_dataset_visual7w.json", "r") as fp:
+            self.datas = json.load(fp)
+
+    def __len__(self):
+        return len(self.datas)
+
+    def __getitem__(self, index):
+        sample = self.datas[index]
+        qa_id = sample['qa_id']
+        question = sample['question']
+        answer_tokens = sample['answer_tokens']
+        answer = sample['gt_answer']
+        choices = sample['multiple_choices']
+
+        image_id = sample['image_id']        
+        image_name = f"v7w_{image_id}.jpg"
+        image_path = os.path.join(self.image_dir, image_name)
+        image = [Image.open(image_path).convert('RGB')]
+
+        q_type = sample['type']
+        return image, question, choices, answer_tokens, qa_id, answer, q_type
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="AVQA Eval")
+    parser.add_argument(
+        "--answer_path", type=str, default="results/results_cmflowinfo_visual7w"  
+    )
+    parser.add_argument(
+        "--model_path", type=str, 
+    )
+    parser.add_argument(
+        "--image_dir", type=str, 
+    )
+    parser.add_argument(
+        "--batch_size", type=int, default=1
+    )
+    parser.add_argument(
+        "--start_idx", type=int, default=0
+    )
+    parser.add_argument(
+        "--n_workers", type=int, default=4
+    )
+    parser.add_argument(
+        "--seed", type=int, default=42
+    )
+    parser.add_argument(
+        "--block_types", nargs='+', type=str, default=['full_attention', 'question_to_last', 'image_to_last', 'image_to_question', 'last_to_last'], choices=['last_to_last', 'image_to_last', 'question_to_last', 'image_to_question', 'full_attention'], help="Blocking types to use"
+    )
+    parser.add_argument(
+        "--k", type=int, default=9, help="Number of blocking window to use"
+    )
+    args = parser.parse_args()
+    return args
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    os.makedirs(args.answer_path, exist_ok=True) 
+    for k, v in args._get_kwargs():
+        pad = ' '.join(['' for _ in range(25-len(k))])
+        print(f"{k}:{pad} {v}", flush=True) 
+    torch.cuda.set_device(0)
+    torch.manual_seed(1)
+    np.random.seed(1)
+    random.seed(1)
+    
+    print('Initializing Model')
+    model = Llama3_Vision(args.model_path) 
+    model.eval()
+    print('Initialization Finished')
+    dataset = Visual7W(image_dir=args.image_dir) 
+    dataloader = DataLoader(dataset, batch_size = args.batch_size, num_workers=args.n_workers, shuffle=False, pin_memory=True, drop_last=False, collate_fn=pil_collate_fn)
+
+    print("Starting...")
+    predictions = []
+    index = 0
+    with torch.no_grad():
+        for data in tqdm(dataloader):
+            images, questions, choices, answer_tokens, qa_ids, answers, q_types = data
+            prompts = []
+
+            if index < args.start_idx:
+                index += len(questions)
+                continue
+
+            for question, choice, answer in zip(questions, choices, answers):
+                all_options = choice + [answer]
+                random.shuffle(all_options)
+                message = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "image"},
+                            {
+                                "type": "text",
+                                "text": (
+                                    "Look at the image carefully and answer this visual question based on the provided choices. "
+                                    "Respond with the correct answer only. Do not include any additional text.\n "
+                                    f"Question: {question}\n "
+                                    f"Choices: \n"
+                                    f" {all_options[0]}\n"
+                                    f" {all_options[1]}\n"
+                                    f" {all_options[2]}\n"
+                                    f" {all_options[3]}"
+                                )
+                            }
+                        ]
+                    }
+                ]
+                prompts.append(message)
+
+            for prompt in prompts:
+                print(f"Prompt:{prompt}\n", flush=True)
+
+            prob_layers = model.generate_multimodal_with_attention_blocking(prompts=prompts, answer_tokens=answer_tokens, images=images, max_gen_len=512, block_types=args.block_types, k=args.k)
+            # dict(block_type, list of probabilities) with probabilities = (B, n_layers)/(B)
+            sample_dict = dict()
+
+            for idx, question_id in enumerate(qa_ids):
+                answer_path = args.answer_path + "/" + str(question_id) + ".json"
+                for block_type in args.block_types:
+                    if block_type in ['last_to_last', 'image_to_last', 'question_to_last', 'image_to_question', 'full_attention']:
+                        sample_dict[block_type] = prob_layers[block_type][idx].tolist()
+                    else:
+                        raise NotImplementedError
+                with open(answer_path, 'w') as f:
+                    json.dump(sample_dict, f, indent=4)
+
+            index += len(questions)
+
+
+            
