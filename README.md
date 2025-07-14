@@ -2,7 +2,7 @@
 [[Paper]]() [[Bib]]()
 
 <figure>
- <img style="float: left" src="figures/architecture2.png" alt="Side view" width="100%">
+ <img style="float: left" src="figures/arch.png" alt="Side view" width="100%">
  <figcaption><em>Overview of the proposed method. (a) LLaMA 3.2-Vision architecture; (b) default attention masking mechanism used in self- and cross-attention layers; (c) modified attention masks enabling analysis of distinct information flows, including last-to-last, question-to-last, image-to-question, and image-to-last pathways.</em></figcaption>
 </figure>
 
