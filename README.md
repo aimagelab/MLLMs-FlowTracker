@@ -1,5 +1,5 @@
 # Tracing Information Flow in LLaMA Vision: A Step Toward Multimodal Understanding
-[[Paper]](https://iris.unimore.it/handle/11380/1383028) [[Bib]]()
+[[Paper]](https://iris.unimore.it/handle/11380/1383028) 
 
 <figure>
  <img style="float: left" src="figures/arch.png" alt="Side view" width="100%">
