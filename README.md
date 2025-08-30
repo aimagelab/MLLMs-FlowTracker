@@ -106,7 +106,7 @@ tracing_information_flow/dataset/
 ## 📚 References 
 * [LLaMA 3.2 Vision](https://arxiv.org/abs/2407.21783)
 
-## 📝 Citation
+## 📝 Citing our work
 ```
 @inproceedings{2025CAIP_tracinginformationflowinllamavision,
 	author = {Saporita, Alessia and Pipoli, Vittorio and Bolelli, Federico and Baraldi, Lorenzo and Acquaviva, Andrea and Ficarra, Elisa},
