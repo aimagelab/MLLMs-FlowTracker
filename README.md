@@ -6,7 +6,16 @@
  <figcaption><em>Overview of the proposed method. (a) LLaMA 3.2-Vision architecture; (b) default attention masking mechanism used in self- and cross-attention layers; (c) modified attention masks enabling analysis of distinct information flows, including last-to-last, question-to-last, image-to-question, and image-to-last pathways.</em></figcaption>
 </figure>
 
+
 This repository contains the code used in our paper "Tracing Information Flow in LLaMA Vision: A Step Toward Multimodal Understanding". 
+
+## 📑 Contents
+- [Overview](#-overview)
+- [Contents](#-contents)
+- [Tracing Information Flow](#️-tracing-information-flow)
+- [Re-create the Datasets](#-if-you-want-to-re-create-the-datasets-used-for-the-analysis)
+- [References](#-references)
+- [Citation](#-citation)
 
 ## 📘 Overview
 We present the first systematic analysis of the information flow between language and vision modalities in LLaMA 3.2-Vision, aiming to advance the understanding of the internal dynamics of of multimodal large language models (MLLMs). 
@@ -36,7 +45,7 @@ conda activate llama_tracing
 pip install -r requirements.txt
 ```
 
-### Tracing Information Flow
+## ⚙️ Tracing Information Flow
 To analyze the information flow in LLaMA 3.2-Vision across the VQAv2, Visual7W, and DocVQA datasets, run the corresponding scripts `vqa_v2_with_attention_blocking.py`, `visual7w_with_attention_blocking`, and `docvqa_with_attention_blocking` with the following arguments:
 
 ```
