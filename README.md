@@ -1,5 +1,5 @@
 # Tracing Information Flow in LLaMA Vision: A Step Toward Multimodal Understanding
-[[Paper]]() [[Bib]]()
+[[Paper]](https://iris.unimore.it/handle/11380/1383028) [[Bib]]()
 
 <figure>
  <img style="float: left" src="figures/arch.png" alt="Side view" width="100%">
@@ -103,6 +103,14 @@ Before running these scripts, make sure to set the correct paths at the top of e
 tracing_information_flow/dataset/
 ```
 
-## References
+## 📚 References 
 * [LLaMA 3.2 Vision](https://arxiv.org/abs/2407.21783)
+
+## 📝 Citation
+@inproceedings{2025CAIP_tracinginformationflowinllamavision,
+	author = {Saporita, Alessia and Pipoli, Vittorio and Bolelli, Federico and Baraldi, Lorenzo and Acquaviva, Andrea and Ficarra, Elisa},
+	title = {Tracing Information Flow in LLaMA Vision: A Step Toward Multimodal Understanding},
+	year = {2025},
+	booktitle = {Proceedings of the 21st International Conference in Computer Analysis of Images and Patterns},
+}
 
