@@ -9,7 +9,7 @@
 
 This repository contains the code used in our paper "Tracing Information Flow in LLaMA Vision: A Step Toward Multimodal Understanding". 
 
-## 📑 Contents
+## 📑 Table of Contents
 - [Overview](#-overview)
 - [Contents](#-contents)
 - [Tracing Information Flow](#️-tracing-information-flow)
