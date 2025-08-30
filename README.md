@@ -12,6 +12,7 @@ This repository contains the code used in our paper "Tracing Information Flow in
 ## 📑 Table of Contents
 - [Overview](#-overview)
 - [Contents](#-contents)
+- [Getting Started](#-getting-started)
 - [Tracing Information Flow](#️-tracing-information-flow)
 - [Re-create the Datasets](#-if-you-want-to-re-create-the-datasets-used-for-the-analysis)
 - [References](#-references)
