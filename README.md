@@ -97,6 +97,7 @@ To generate the final datasets used for information flow analysis, run:
 - `tracing_information_flow/create_vqa.py`
 - `tracing_information_flow/create_visual7w.py` 
 - `tracing_information_flow/create_docvqa.py` 
+
 Before running these scripts, make sure to set the correct paths at the top of each file. The final datasets will be created inside the corresponding subfolders in:
 ```
 tracing_information_flow/dataset/
