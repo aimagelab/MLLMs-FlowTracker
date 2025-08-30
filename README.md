@@ -2,10 +2,10 @@
 [[Paper]](https://iris.unimore.it/handle/11380/1383028) 
 
 <figure>
- <img style="float: left" src="figures/arch.png" alt="Side view" width="100%">
+ <img style="float: center" src="figures/arch.png" alt="Side view" width="100%">
  <figcaption><em>Overview of the proposed method. (a) LLaMA 3.2-Vision architecture; (b) default attention masking mechanism used in self- and cross-attention layers; (c) modified attention masks enabling analysis of distinct information flows, including last-to-last, question-to-last, image-to-question, and image-to-last pathways.</em></figcaption>
 </figure>
-
+<br>
 
 This repository contains the code used in our paper "Tracing Information Flow in LLaMA Vision: A Step Toward Multimodal Understanding". 
 
