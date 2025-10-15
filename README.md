@@ -19,7 +19,7 @@ This repository contains the code used in our paper "Tracing Information Flow in
 - [Citation](#-citation)
 
 ## 📘 Overview
-We present the first systematic analysis of the information flow between language and vision modalities in LLaMA 3.2-Vision, aiming to advance the understanding of the internal dynamics of of multimodal large language models (MLLMs). 
+We present the first systematic analysis of the information flow between language and vision modalities in LLaMA 3.2-Vision, aiming to advance the understanding of the internal dynamics of multimodal large language models (MLLMs). 
 
 This repository provides everything needed to reproduce our experiments and results on visual question answering (VQA) tasks using the following datasets:
 - [VQAv2](https://visualqa.org/) (for open-ended VQA)
